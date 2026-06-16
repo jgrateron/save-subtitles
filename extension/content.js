@@ -152,6 +152,21 @@
 
   // ── Lógica ────────────────────────────────────────────────────────
 
+  function codigoMeet() {
+    // Extrae el id de la URL: https://meet.google.com/cea-bfrq-sen → cea-bfrq-sen
+    var path = window.location.pathname.replace(/^\//, "");
+    return path || "meet";
+  }
+
+  function nombreArchivo() {
+    return (
+      codigoMeet() +
+      "_" +
+      new Date().toISOString().replace(/[:.]/g, "-") +
+      ".txt"
+    );
+  }
+
   function recolectar() {
     var targetNode = document.querySelector('div[aria-label="Subtítulos"]');
     if (!targetNode) return;
@@ -198,10 +213,7 @@
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
-    a.download =
-      "meet_captions_" +
-      new Date().toISOString().replace(/[:.]/g, "-") +
-      ".txt";
+    a.download = nombreArchivo();
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -263,10 +275,7 @@
       var url = URL.createObjectURL(blob);
       var a = document.createElement("a");
       a.href = url;
-      a.download =
-        "meet_captions_" +
-        new Date().toISOString().replace(/[:.]/g, "-") +
-        ".txt";
+      a.download = nombreArchivo();
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
