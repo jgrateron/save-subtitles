@@ -13,7 +13,7 @@
   var estilo = document.createElement("style");
   estilo.textContent = [
     "#ss-toolbar {",
-    "  position:fixed; bottom:16px; right:16px; z-index:99999;",
+    "  position:fixed; bottom:16px; left:16px; z-index:99999;",
     "  display:flex; gap:8px;",
     "  font-family:'Google Sans',Roboto,Arial,sans-serif; font-size:13px;",
     "}",
@@ -29,7 +29,7 @@
     "#ss-btn-detener { background:#ea4335; }",
     "#ss-btn-descargar { background:#34a853; }",
     "#ss-toast {",
-    "  position:fixed; bottom:72px; right:16px; z-index:99999;",
+    "  position:fixed; bottom:72px; left:16px; z-index:99999;",
     "  max-width:320px; padding:12px 20px; border-radius:8px;",
     "  font-family:'Google Sans',Roboto,Arial,sans-serif; font-size:13px;",
     "  color:#fff; background:#333;",
