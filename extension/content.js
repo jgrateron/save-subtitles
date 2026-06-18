@@ -45,9 +45,9 @@
   var toolbar = document.createElement("div");
   toolbar.id = "ss-toolbar";
   toolbar.innerHTML =
-    '<button id="ss-btn-iniciar">Iniciar recolección</button>' +
-    '<button id="ss-btn-detener" disabled>Detener recolección</button>' +
-    '<button id="ss-btn-descargar">Descargar</button>';
+    '<button id="ss-btn-iniciar">Start</button>' +
+    '<button id="ss-btn-detener" disabled>Stop</button>' +
+    '<button id="ss-btn-descargar">Download</button>';
   document.body.appendChild(toolbar);
 
   var toast = document.createElement("div");
@@ -167,12 +167,14 @@
     );
   }
 
-  function recolectar() {
+  // incluirTodo: true para descarga manual, false para recolección periódica
+  function recolectar(incluirTodo) {
     var targetNode = document.querySelector('div[aria-label="Subtítulos"]');
     if (!targetNode) return;
 
     var arrayNode = Array.from(targetNode.children);
-    for (var j = 0; j < arrayNode.length - 3; j++) {
+    var limite = incluirTodo ? arrayNode.length : arrayNode.length - 3;
+    for (var j = 0; j < limite; j++) {
       var childElement = arrayNode[j];
       var text = childElement.innerText.trim();
       if (!text) continue;
@@ -205,7 +207,7 @@
   }
 
   function descargar() {
-    recolectar();
+    recolectar(true);  // tomar todo al descargar manualmente
     if (collectedTextsArray.length === 0) return;
 
     var resultado = collectedTextsArray.join("\n");
@@ -266,7 +268,7 @@
 
   function descargarAlCerrar() {
     if (!recolectando) return;
-    recolectar();
+    recolectar(true);
     guardarRespaldo();
     // Intentar disparar la descarga antes del cierre
     if (collectedTextsArray.length > 0) {
