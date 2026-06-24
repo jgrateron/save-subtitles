@@ -26,8 +26,9 @@
     "#ss-toolbar button:active { transform:scale(.95); }",
     "#ss-toolbar button:disabled { opacity:.45; cursor:default; }",
     "#ss-btn-iniciar { background:#1a73e8; }",
-    "#ss-btn-detener { background:#ea4335; }",
+
     "#ss-btn-descargar { background:#34a853; }",
+    "#ss-btn-descargar-cerrar { background:#9334e6; }",
     "#ss-toast {",
     "  position:fixed; bottom:72px; left:16px; z-index:99999;",
     "  max-width:320px; padding:12px 20px; border-radius:8px;",
@@ -46,8 +47,8 @@
   toolbar.id = "ss-toolbar";
   toolbar.innerHTML =
     '<button id="ss-btn-iniciar">Start</button>' +
-    '<button id="ss-btn-detener" disabled>Stop</button>' +
-    '<button id="ss-btn-descargar">Download</button>';
+    '<button id="ss-btn-descargar" disabled>Download</button>' +
+    '<button id="ss-btn-descargar-cerrar" disabled>Download & Stop</button>';
   document.body.appendChild(toolbar);
 
   var toast = document.createElement("div");
@@ -55,8 +56,8 @@
   document.body.appendChild(toast);
 
   var btnIniciar = document.getElementById("ss-btn-iniciar");
-  var btnDetener = document.getElementById("ss-btn-detener");
   var btnDescargar = document.getElementById("ss-btn-descargar");
+  var btnDescargarCerrar = document.getElementById("ss-btn-descargar-cerrar");
 
   var toastTimer = null;
 
@@ -179,7 +180,7 @@
       var text = childElement.innerText.trim();
       if (!text) continue;
 
-      var arreglo = text.toUpperCase().split("\n");
+      var arreglo = text.toLowerCase().split("\n");
       var texto = "[" + arreglo[0] + "]\n" + arreglo[1];
 
       var encontrado = false;
@@ -227,6 +228,13 @@
     borrarRespaldo();
   }
 
+  function descargarYCerrar() {
+    descargar();                  // descarga el archivo
+    borrarRespaldo();             // limpia localStorage
+    collectedTextsArray = [];     // vacía el array en memoria
+    detener();                    // frena intervalos y ajusta botones
+  }
+
   function iniciar() {
     if (recolectando) return;
 
@@ -237,7 +245,8 @@
       idRecolectar = setInterval(recolectarYPersistir, 60 * 1000);
       idDescargar = setInterval(descargarYLimpiar, 20 * 60 * 1000);
       btnIniciar.disabled = true;
-      btnDetener.disabled = false;
+      btnDescargar.disabled = false;
+      btnDescargarCerrar.disabled = false;
 
       if (!panelOk) {
         mostrarToast(
@@ -261,7 +270,8 @@
     idRecolectar = null;
     idDescargar = null;
     btnIniciar.disabled = false;
-    btnDetener.disabled = true;
+    btnDescargar.disabled = true;
+    btnDescargarCerrar.disabled = true;
   }
 
   // ── Cierre de pestaña ─────────────────────────────────────────────
@@ -298,8 +308,8 @@
   // ── Eventos ───────────────────────────────────────────────────────
 
   btnIniciar.addEventListener("click", iniciar);
-  btnDetener.addEventListener("click", detener);
   btnDescargar.addEventListener("click", descargarYLimpiar);
+  btnDescargarCerrar.addEventListener("click", descargarYCerrar);
 
   // Prevenir cierre accidental: pedir confirmación si hay datos activos
   window.addEventListener("beforeunload", function (e) {
