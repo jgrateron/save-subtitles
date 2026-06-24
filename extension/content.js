@@ -5,7 +5,6 @@
 
   var collectedTextsArray = [];
   var idRecolectar = null;
-  var idDescargar = null;
   var recolectando = false;
 
   // ── UI ────────────────────────────────────────────────────────────
@@ -243,7 +242,6 @@
       recolectando = true;
       recolectarYPersistir();
       idRecolectar = setInterval(recolectarYPersistir, 60 * 1000);
-      idDescargar = setInterval(descargarYLimpiar, 20 * 60 * 1000);
       btnIniciar.disabled = true;
       btnDescargar.disabled = false;
       btnDescargarCerrar.disabled = false;
@@ -266,9 +264,7 @@
     if (!recolectando) return;
     recolectando = false;
     clearInterval(idRecolectar);
-    clearInterval(idDescargar);
     idRecolectar = null;
-    idDescargar = null;
     btnIniciar.disabled = false;
     btnDescargar.disabled = true;
     btnDescargarCerrar.disabled = true;
